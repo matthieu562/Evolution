@@ -1,0 +1,9 @@
+
+Pour mettre les changements en ligne sur git
+git add path/to/file.txt        // ou barre changes a gauche 
+cd Labyby2.0; git commit -m "new"
+git push
+cd ..
+
+Pour les récupérer :
+cd Labyby;git pull; cd ..

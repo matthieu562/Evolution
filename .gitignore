@@ -1,0 +1,12 @@
+# Ignorer les fichiers bytecode Python
+*.pyc
+__pycache__
+save
+Playground
+env_Evolution
+
+# Ignorer les fichiers de logs
+logs/
+
+# Ignorer les fichiers de configuration sensibles
+config.ini

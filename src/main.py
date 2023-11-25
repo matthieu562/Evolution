@@ -1,6 +1,7 @@
 import time
 since_started_clock = time.time()
 from entity import Entity
+from grid import Grid
 from prey import Prey
 from predator import Predator
 from food import Food
@@ -74,10 +75,12 @@ _ = [Predator(
     ]
 
 new_food_spawn_clock = 0
+grid_content_old = {}
 scoreboard_delay = 0
 running = True
 frame_by_frame = True
-is_first_loop = True
+is_first_loop_top = True
+is_first_loop_bottom = True
 while running:
     window.fill(BACKGROUND)
 
@@ -96,6 +99,21 @@ while running:
         predators = Entity.get_all_predators()
         foods = Entity.get_all_foods()
 
+        # Grid management
+        # grid = Grid(100, 200, 30, 30, {})
+        # grid.display_grid(window)
+        if is_first_loop_top:
+            Grid.create_grid()
+            # for grid in Grid.get_all_grids():
+            #     grid.initialize_content(entities)
+        is_first_loop_top = False
+                
+        for grid in Grid.get_all_grids():
+            grid_content = Entity.grid_content
+        # if grid_content != grid_content_old:
+            #grid.draw(window, grid_content)
+        # grid_content_old = grid_content
+
         if scoreboard_delay >= 2 * GAME_FREQ:
             print(' ')
             print('entities', len(entities))
@@ -106,7 +124,7 @@ while running:
             # print('collide_with_time:', Entity.collide_with_time)
             # print('get_all_entities_time:', Entity.get_all_entities_time)
             print('since_started_clock:', time.time() - since_started_clock)
-            print('GAME_CLOCK:', GAME_CLOCK)
+            # print('GAME_CLOCK:', GAME_CLOCK)
             scoreboard_delay = 0
 
         for prey in preys:
@@ -123,7 +141,9 @@ while running:
             #food.move()
             food.update_status()
             food.draw(window)
-            
+        
+        #print(Entity.grid_content, '\n')
+        
         ## Random coords food spawn
         if new_food_spawn_clock >= FOOD_SPAWN_DELAY:
             _ = [Food(
@@ -149,15 +169,18 @@ while running:
             # entity.draw(window)
             entity.update_time_properties()
         new_food_spawn_clock += 1
+        scoreboard_delay += 1
         GAME_CLOCK += 1
 
-        pygame.display.update()
+        pygame.display.update() # update only changed pixel (si jai bien capté)
+        #pygame.display.flip() # refresh tout
 
     clock.tick(GAME_FREQ)
 
-    if is_first_loop:
+    if is_first_loop_bottom:
+        # Change this bool to freeze at start
         frame_by_frame = True
-    is_first_loop = False
+    is_first_loop_bottom = False
 
 pygame.quit()
 
@@ -170,5 +193,6 @@ find_index_by_id(69)
 Entity.get_all_entities()[55].detect_entities(Entity.get_all_entities())
 Entity.get_all_entities()[find_index_by_id(69)].display_infos()
 
-"""
 y a des ptis bugs sur la vision encore, genre la salade n'est pas détécté mais pas que 
+
+"""
